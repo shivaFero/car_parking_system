@@ -23,17 +23,19 @@
                     <v-row>
                       <v-col cols="12">
                         <v-text-field
-                          v-model="loginEmail"
-                          :rules="loginEmailRules"
-                          label="E-mail"
+                          v-model="loginDetails.username"
+                          :rules="[rules.required]"
+                          label="Username"
                           required
+                          :error-messages="fieldErrors.username"
+                          @input="delete fieldErrors.username"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
                         <v-text-field
-                          v-model="loginPassword"
+                          v-model="loginDetails.password"
                           :append-icon="show1 ? 'eye' : 'eye-off'"
-                          :rules="[rules.required, rules.min]"
+                          :rules="[rules.required]"
                           :type="show1 ? 'text' : 'password'"
                           name="input-10-1"
                           label="Password"
@@ -50,7 +52,7 @@
                           block
                           :disabled="!loginFormValid"
                           color="success"
-                          @click="validate"
+                          @click="submitLoginForm()"
                         >
                           Login
                         </v-btn>
@@ -67,20 +69,35 @@
                     <v-row>
                       <v-col cols="12" sm="6" md="6">
                         <v-text-field
-                          v-model="userSignupDetails.firstName"
+                          v-model="userSignupDetails.first_name"
                           :rules="[rules.required]"
                           label="First Name"
                           maxlength="20"
                           required
+                          :error-messages="fieldErrors.first_name"
+                          @input="delete fieldErrors.first_name"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" md="6">
                         <v-text-field
-                          v-model="userSignupDetails.lastName"
+                          v-model="userSignupDetails.last_name"
                           :rules="[rules.required]"
                           label="Last Name"
                           maxlength="20"
                           required
+                          :error-messages="fieldErrors.last_name"
+                          @input="delete fieldErrors.last_name"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="userSignupDetails.username"
+                          :rules="[rules.required]"
+                          label="Username"
+                          maxlength="20"
+                          required
+                          :error-messages="fieldErrors.username"
+                          @input="delete fieldErrors.username"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
@@ -89,6 +106,8 @@
                           :rules="emailRules"
                           label="E-mail"
                           required
+                          :error-messages="fieldErrors.email"
+                          @input="delete fieldErrors.email"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
@@ -102,6 +121,8 @@
                           hint="At least 8 characters"
                           counter
                           @click:append="show1 = !show1"
+                          :error-messages="fieldErrors.password"
+                          @input="delete fieldErrors.password"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
@@ -124,7 +145,7 @@
                           block
                           :disabled="!signupFormValid"
                           color="success"
-                          @click="validate"
+                          @click="submit()"
                           >Register</v-btn
                         >
                       </v-col>
@@ -141,6 +162,7 @@
 </template>
 
 <script>
+import { setDataInLocalStorage } from "@/utils/functions";
 export default {
   name: "The-Landing-Comp",
   data() {
@@ -155,13 +177,10 @@ export default {
       signupFormValid: true,
 
       userSignupDetails: {},
+      loginDetails: {},
 
-      loginPassword: null,
-      loginEmail: null,
-      loginEmailRules: [
-        (v) => !!v || "Required",
-        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-      ],
+      fieldErrors: {},
+
       emailRules: [
         (v) => !!v || "Required",
         (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
@@ -182,16 +201,39 @@ export default {
     },
   },
   methods: {
-    validate() {
-      if (this.$refs.loginForm.validate()) {
-        // submit form to server/API here...
-      }
+    submit() {
+      this.$api.users
+        .createUsers(this.userSignupDetails)
+        .then((res) => {
+          console.log(res.data);
+          setDataInLocalStorage(res.data, "user_credentials");
+          this.$router.push({
+            path: "/auth/dashboard/",
+          });
+        })
+        .catch((error) => {
+          this.fieldErrors = error.data;
+          console.error(error);
+        });
     },
-    reset() {
-      this.$refs.form.reset();
-    },
-    resetValidation() {
-      this.$refs.form.resetValidation();
+    submitLoginForm() {
+      this.$api.users
+        .userLogin(this.loginDetails)
+        .then((res) => {
+          setDataInLocalStorage(res.data, "user_credentials");
+          this.$router.push({
+            path: "/auth/dashboard/",
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+          this.fieldErrors = err.data;
+          this.$bus.$emit("showToaster", {
+            message:
+              err.data?.message || "Unable to log in with provided credentials",
+            color: "error",
+          });
+        });
     },
   },
 };

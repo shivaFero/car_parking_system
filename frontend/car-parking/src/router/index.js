@@ -1,7 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import LandingPage from "@/views/index.vue";
-import Dashboard from "@/views/dashboard/index.vue";
+import PageNotFound from "@/components/PageNotFound.vue";
+
+import slotRouter from "./slot";
+
+import DefaultLayout from "@/layouts/default.vue";
 
 Vue.use(VueRouter);
 
@@ -12,33 +16,31 @@ const routes = [
     component: LandingPage,
   },
   {
-    path: "/dashboard",
-    name: "dashboard",
-    component: Dashboard,
+    path: "/auth",
+    name: "auth",
+    component: DefaultLayout,
+    children: [...slotRouter],
     meta: {
       auth: true,
     },
+  },
+  {
+    path: "*",
+    name: "not-found",
+    component: PageNotFound,
   },
 ];
 
 const router = new VueRouter({
   mode: "history",
-  base: process.env.BASE_URL,
   routes,
 });
 
 // For Check Route Auth
 router.beforeEach((to, from, next) => {
-  // // Check Urls Match or not
-  // if (to.path == from.path) {
-  //   next();
-  // } else {
-  //   next({ name: "home" });
-  // }
-
   // Check Users are login or not
   if (to.matched.some((record) => record.meta.auth)) {
-    if (!localStorage.getItem("token")) {
+    if (!localStorage.getItem("user_credentials")) {
       next({ name: "home" });
     } else {
       next();
