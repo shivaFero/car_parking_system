@@ -13,14 +13,11 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-card-title>
-        <v-col cols="12">
-          <v-img
-            max-height="100"
-            max-width="600"
-            src="@/assets/qrcode.jpg"
-          ></v-img>
-          <h4 class="d-flex justify-center">{{ showDetails.pass_id }}</h4>
+        <!-- -----------------------BARCODE ---------------------->
+        <v-col cols="12" class="d-flex justify-center">
+          <VueBarcode :value="showDetails.pass_id"> </VueBarcode>
         </v-col>
+
         <v-card-text class="pa-5">
           <v-row>
             <v-col
@@ -72,8 +69,12 @@
 
 <script>
 import html2pdf from "html2pdf.js";
+import VueBarcode from "vue-barcode";
 export default {
   name: "slot-Booking-details",
+  components: {
+    VueBarcode,
+  },
   props: {
     value: {
       type: Boolean,

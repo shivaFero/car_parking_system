@@ -22,6 +22,15 @@
             <v-icon small class="mr-1">mdi-calendar-month</v-icon>
             Check Slot Availability
           </v-btn>
+          <v-btn
+            depressed
+            color="primary mx-3"
+            class="rounded"
+            @click="paymentInfoDialog = true"
+          >
+            <v-icon small class="mr-1">mdi-calendar-month</v-icon>
+            View Pricing
+          </v-btn>
         </v-col>
       </template>
       <template #leftFilterSlot>
@@ -81,6 +90,9 @@
         <v-col v-if="slotAvailabilityDialog">
           <SlotBookingAvailabilityDialog v-model="slotAvailabilityDialog" />
         </v-col>
+        <v-col v-if="paymentInfoDialog">
+          <SlotPaymentInfoDialog v-model="paymentInfoDialog" />
+        </v-col>
       </template>
     </AgGridTable>
   </div>
@@ -96,6 +108,7 @@ import SlotBookingDetails from "@/components/slot_booking/SlotBookingDetails.vue
 import SlotBookingFilter from "@/components/slot_booking/SlotBookingFilter.vue";
 import SlotBookingCancellationDialog from "@/components/slot_booking/SlotBookingCancellationDialog.vue";
 import SlotBookingAvailabilityDialog from "@/components/slot_booking/SlotBookingAvailabilityDialog.vue";
+import SlotPaymentInfoDialog from "@/components/slot_booking/SlotPaymentInfoDialog.vue";
 export default {
   name: "SlotBooking-Page",
   components: {
@@ -107,6 +120,7 @@ export default {
     SlotBookingFilter,
     SlotBookingCancellationDialog,
     SlotBookingAvailabilityDialog,
+    SlotPaymentInfoDialog,
   },
   data() {
     return {
@@ -116,6 +130,7 @@ export default {
       openFilterDialog: false,
       openBookingCancellationDialog: false,
       slotAvailabilityDialog: false,
+      paymentInfoDialog: false,
       filter: {},
       // Pagination Vars
       itemsPerPage: 10,

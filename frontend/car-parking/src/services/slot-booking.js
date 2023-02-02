@@ -103,4 +103,18 @@ export default (axios) => ({
         });
     });
   },
+  getPaymentInfo(params = {}) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${slot.base}payment_info/`, {
+          params: params,
+        })
+        .then((res) => {
+          resolve(responseHandler(res));
+        })
+        .catch((err) => {
+          reject(errorHandler(err));
+        });
+    });
+  },
 });
