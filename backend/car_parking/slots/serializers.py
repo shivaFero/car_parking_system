@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from django.db.models import Q
 from django.utils import timezone
 from rest_framework import serializers
 
@@ -61,7 +62,10 @@ class SlotBookingSerializers(serializers.ModelSerializer):
         if from_time > to_time:
             raise serializers.ValidationError("From Time can not be greater than To Time ")
 
-        slot_time = booking_slots.filter(from_time__gte=from_time, to_time__lte=to_time)
+        slot_time = booking_slots.filter(
+            Q(from_time__lte=from_time, to_time__gt=from_time) |
+            Q(from_time__lte=to_time, to_time__gt=to_time)
+        )
 
         list_of_vehicle_no = slot_time.values_list('vehicle_no', flat=True)
 
@@ -82,13 +86,13 @@ class SlotBookingSerializers(serializers.ModelSerializer):
         if total_hrs < slot_config.minimum_booking_hr:
             raise serializers.ValidationError(f"Booking should be at least for {slot_config.minimum_booking_hr} hr ")
 
-        slot_count = slot_time.count()
+        slot_count = slot_time.count() + 1  # Increment with 1 if initially have no any slot booked
         if slot_count > slot_config.total_space:
             raise serializers.ValidationError(f"No any space available on {booking_date} "
                                               f"between {from_time} to {to_time}")
         attrs['total_booking_hrs'] = round_decimal_places(total_hrs)
         attrs['exit_date_time'] = combine_date_time(booking_date, to_time)
-        attrs['slot_assigned'] = slot_count if slot_count else 1
+        attrs['slot_assigned'] = slot_count
 
         attrs['total_amount'] = self.get_payment_amount_by_hour(from_time, to_time)
         return attrs
