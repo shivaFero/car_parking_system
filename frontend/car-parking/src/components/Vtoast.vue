@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: "Vtoast-Com",
+  name: "Vtoast-Component",
   props: {
     value: Boolean,
     message: {
@@ -31,7 +31,7 @@ export default {
     },
     timeout: {
       type: Number,
-      default: 2000,
+      default: 5000,
     },
   },
   computed: {

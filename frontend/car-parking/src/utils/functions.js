@@ -11,7 +11,6 @@ export function responseHandler(res) {
   } else {
     obj = res;
   }
-  console.log("in res functions", obj);
   return obj;
 }
 
@@ -25,10 +24,19 @@ export function errorHandler(err) {
     }
   }
   obj.status = err.response.status;
-  console.log("in err functions", obj);
   return obj;
 }
 
 export function setDataInLocalStorage(data, keyName) {
   localStorage.setItem(keyName, JSON.stringify(data));
+}
+export function getDataFromLocalStorage(keyName) {
+  return JSON.parse(localStorage.getItem(keyName));
+}
+export function removeDataFromLocalStorage(keyName) {
+  localStorage.removeItem(keyName);
+}
+
+export function getLoginUserDetails() {
+  return getDataFromLocalStorage("user_credentials");
 }

@@ -1,4 +1,7 @@
 from django.contrib import admin
-from .models import SlotBooking
+from . import models
 
-admin.site.register(SlotBooking)
+admin.site.register(models.SlotBooking)
+admin.site.register(models.SlotConfig)
+admin.site.register(models.PaymentConfig)
+admin.site.register(models.BookingPayment)

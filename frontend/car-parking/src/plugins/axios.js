@@ -2,7 +2,7 @@ import router from "../router";
 import axios from "axios";
 
 function authHeader() {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   if (token) {
     return `token ${token}`;
   } else {
@@ -15,7 +15,6 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  console.log("env", process.env)
   let head = authHeader();
   if (head) {
     config.headers.Authorization = head;
@@ -36,6 +35,7 @@ axiosInstance.interceptors.response.use(
       router.push({
         name: "not-found",
       });
+      // #TODO: except 404 page show alert conformation dialog
     }
     throw err;
   }

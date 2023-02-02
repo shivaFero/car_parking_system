@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <TheNavBar />
-    <!-- <Header /> -->
+    <TheHeader />
     <v-main style="position: relative">
       <v-container
         fluid
@@ -15,11 +15,13 @@
 </template>
 
 <script>
-import TheNavBar from "../components/TheNavBar.vue";
+import TheNavBar from "@/components/TheNavBar.vue";
+import TheHeader from "@/components/TheHeader.vue";
 export default {
   name: "Default-Comp",
   components: {
     TheNavBar,
+    TheHeader,
   },
 };
 </script>
