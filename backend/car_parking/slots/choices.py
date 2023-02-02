@@ -1,7 +1,6 @@
 from slots.constants import PaymentTypeConstant, BookingStatus, VehicleType, PaymentStatus
 
 PAYMENT_TYPE_CHOICES = (
-    (PaymentTypeConstant.PREPAID, 'Prepaid'),
     (PaymentTypeConstant.CASH, 'Cash'),
     (PaymentTypeConstant.UPI, 'UPI'),
     (PaymentTypeConstant.CARD, 'Card'),

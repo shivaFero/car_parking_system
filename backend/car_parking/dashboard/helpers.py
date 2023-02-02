@@ -30,7 +30,6 @@ def get_dashboard_based_on_given_from_to_date(request, from_date=None, to_date=N
 
     total_payment = all_slot_payments.count()
     payment_count = {
-        PaymentTypeConstant.PREPAID: all_slot_payments.filter(payment_type=PaymentTypeConstant.PREPAID).count(),
         PaymentTypeConstant.CASH: all_slot_payments.filter(payment_type=PaymentTypeConstant.CASH).count(),
         PaymentTypeConstant.CARD: all_slot_payments.filter(payment_type=PaymentTypeConstant.CARD).count(),
         PaymentTypeConstant.UPI: all_slot_payments.filter(payment_type=PaymentTypeConstant.UPI).count(),
@@ -39,8 +38,6 @@ def get_dashboard_based_on_given_from_to_date(request, from_date=None, to_date=N
     payment_info = dict()
     if total_payment:
         payment_in_percentage = {
-            PaymentTypeConstant.PREPAID: round_decimal_places(
-                (payment_count[PaymentTypeConstant.PREPAID]*100)/total_payment),
             PaymentTypeConstant.CASH: round_decimal_places(
                 (payment_count[PaymentTypeConstant.CASH]*100)/total_payment),
             PaymentTypeConstant.CARD: round_decimal_places(

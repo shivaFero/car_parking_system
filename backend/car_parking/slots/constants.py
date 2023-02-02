@@ -1,5 +1,4 @@
 class PaymentTypeConstant:
-    PREPAID = 'Prepaid'
     CASH = 'Cash'
     UPI = 'UPI'
     CARD = 'Card'

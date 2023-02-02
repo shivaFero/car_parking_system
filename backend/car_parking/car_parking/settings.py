@@ -54,6 +54,7 @@ PROJECT_APPS = [
     'users',
     'slots',
     'dashboard',
+    'core'
 ]
 INSTALLED_APPS = THIRD_PARTY_APPS + PROJECT_APPS
 

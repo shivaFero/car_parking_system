@@ -1,8 +1,7 @@
 from django.db import models
 
-from slots.choices import PAYMENT_TYPE_CHOICES, BOOKING_STATUS_CHOICES, VEHICLE_TYPE_CHOICES, PAYMENT_STATUS_CHOICES
-from slots.constants import PaymentTypeConstant, BookingStatus, VehicleType, PaymentStatus
 from users.models import User
+from . import constants, choices
 
 
 # Create your models here.
@@ -28,7 +27,8 @@ class PaymentConfig(models.Model):
 class SlotBooking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     vehicle_no = models.CharField(max_length=50)
-    vehicle_type = models.CharField(max_length=50, choices=VEHICLE_TYPE_CHOICES, default=VehicleType.FOUR_WHEELER)
+    vehicle_type = models.CharField(max_length=50, choices=choices.VEHICLE_TYPE_CHOICES,
+                                    default=constants.VehicleType.FOUR_WHEELER)
     # Time Stamp
     booking_date = models.DateField(db_index=True, verbose_name='Booking Date')
     exit_date_time = models.DateTimeField(blank=True, null=True, verbose_name="Exit Date Time")
@@ -38,7 +38,8 @@ class SlotBooking(models.Model):
 
     slot_assigned = models.PositiveIntegerField(default=0, verbose_name='Slot Assigned To Vehicle')
 
-    booking_status = models.CharField(choices=BOOKING_STATUS_CHOICES, max_length=10, default=BookingStatus.IN,
+    booking_status = models.CharField(choices=choices.BOOKING_STATUS_CHOICES, max_length=10,
+                                      default=constants.BookingStatus.IN,
                                       verbose_name='Booking Status')
 
     total_amount = models.FloatField(default=0, verbose_name='Total Amount/Due Amount')
@@ -67,11 +68,13 @@ class SlotBooking(models.Model):
 
 class BookingPayment(models.Model):
     slot = models.ForeignKey(SlotBooking, related_name='slot_payments', on_delete=models.RESTRICT)
-    payment_type = models.CharField(choices=PAYMENT_TYPE_CHOICES, max_length=50, default=PaymentTypeConstant.PREPAID)
+    payment_type = models.CharField(choices=choices.PAYMENT_TYPE_CHOICES, max_length=50,
+                                    default=constants.PaymentTypeConstant.UPI)
     due_amount = models.FloatField(default=0)
     amount_collected = models.FloatField(default=0)
 
-    payment_status = models.CharField(max_length=50, choices=PAYMENT_STATUS_CHOICES, default=PaymentStatus.SUCCESS)
+    payment_status = models.CharField(max_length=50, choices=choices.PAYMENT_STATUS_CHOICES,
+                                      default=constants.PaymentStatus.SUCCESS)
 
     transaction_ref_no = models.CharField(max_length=250, null=True, blank=True, verbose_name='Transaction Ref No')
 

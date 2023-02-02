@@ -19,3 +19,16 @@ def get_slot_availability(date: None, duration=2):
     return slot_duration
 
 
+def get_payment_charges_info():
+    payment_config = models.PaymentConfig.objects.all()
+    current = 0
+    res = {}
+    for payment in payment_config:
+        res[f"{current} Hour to {payment.hr_range} Hour"] = f"{payment.price} Rs"
+        current = payment.hr_range
+
+    return res
+
+
+
+

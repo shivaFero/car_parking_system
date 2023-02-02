@@ -54,3 +54,11 @@ class GetSlotAvailability(APIView):
         except Exception as err:
             return Response(f"While fetching slot availability got errors: {str(err)}")
 
+
+class GetPaymentChargesInfoAPIView(APIView):
+    def get(self, request):
+        try:
+            availability_details = helpers.get_payment_charges_info()
+            return Response(availability_details)
+        except Exception as err:
+            return Response(f"While fetching payment info got errors: {str(err)}")
