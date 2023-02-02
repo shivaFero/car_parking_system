@@ -28,7 +28,7 @@
             class="rounded"
             @click="paymentInfoDialog = true"
           >
-            <v-icon small class="mr-1">mdi-calendar-month</v-icon>
+            <v-icon small class="mr-1">mdi-cash-multiple</v-icon>
             View Pricing
           </v-btn>
         </v-col>
@@ -47,7 +47,7 @@
         </v-col>
       </template>
       <template #listAction>
-        <v-btn small depressed class="primary" @click="showFormDialog = true">
+        <v-btn small depressed class="primary" @click="addSlots()">
           <v-icon small class="mr-1">mdi-plus</v-icon>
           <span class="mr-2">Book Slot</span>
         </v-btn>
@@ -56,6 +56,7 @@
         <v-col v-if="showFormDialog">
           <SlotBookingForm
             v-model="showFormDialog"
+            :vehicle-type-list="vehicleTypeList"
             @refresh-list-page="refreshListPage"
           />
         </v-col>
@@ -206,6 +207,7 @@ export default {
       slotBookingList: [],
       currentBookingDetails: {},
       bookingDetails: {},
+      vehicleTypeList: [],
     };
   },
   computed: {
@@ -250,11 +252,14 @@ export default {
           console.error(err);
         });
     },
+    addSlots() {
+      this.showFormDialog = true;
+      this.getSlotBookingOptionList();
+    },
     getSlotBookingDetails(id) {
       this.$api.slotBooking
         .getSlotBookingDetails(id)
         .then((res) => {
-          console.log(res.data);
           this.bookingDetails = res.data;
           this.showBookingDetails = true;
         })
@@ -267,7 +272,6 @@ export default {
         });
     },
     cancelSlotBooking(id) {
-      console.log(id);
       this.slotId = id;
       this.openBookingCancellationDialog = true;
     },
@@ -303,6 +307,17 @@ export default {
       localStorage.removeItem("slotBookingFilter");
       this.filter = {};
       this.getSlotBookingList({ limit: 10, offset: 0 });
+    },
+    getSlotBookingOptionList(params = {}) {
+      this.$api.slotBooking
+        .getSlotBookingOptions(params)
+        .then((res) => {
+          const data = res.data?.actions?.POST;
+          this.vehicleTypeList = data?.vehicle_type?.choices || [];
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     },
   },
 };

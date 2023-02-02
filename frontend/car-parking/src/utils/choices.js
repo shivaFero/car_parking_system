@@ -14,10 +14,6 @@ export const vehicleTypes = [
 ];
 export const paymentTypes = [
   {
-    value: "Prepaid",
-    display_name: "Prepaid",
-  },
-  {
     value: "Cash",
     display_name: "Cash",
   },

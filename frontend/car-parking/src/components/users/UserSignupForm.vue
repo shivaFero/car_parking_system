@@ -75,7 +75,7 @@
           <v-col cols="12">
             <v-text-field
               block
-              v-model="userSignupDetails.verify"
+              v-model="userSignupDetails.confirm_password"
               :append-icon="showCnfPassword ? 'mdi-eye' : 'mdi-eye-off'"
               :rules="formType == 'add' ? [rules.required, passwordMatch] : []"
               :type="showCnfPassword ? 'text' : 'password'"
@@ -83,6 +83,8 @@
               label="Confirm Password"
               counter
               @click:append="showCnfPassword = !showCnfPassword"
+              :error-messages="fieldErrors.confirm_password"
+              @input="delete fieldErrors.confirm_password"
             ></v-text-field>
           </v-col>
           <v-spacer></v-spacer>
@@ -136,7 +138,7 @@ export default {
   computed: {
     passwordMatch() {
       return () =>
-        this.userSignupDetails?.password === this.userSignupDetails?.verify ||
+        this.userSignupDetails?.password === this.userSignupDetails?.confirm_password ||
         "Password must match";
     },
   },

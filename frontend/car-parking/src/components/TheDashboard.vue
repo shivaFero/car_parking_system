@@ -20,7 +20,7 @@
             label="To Date"
             outlined
             hide-details="auto"
-            :max="today"
+            :min="filters.from_date"
             v-model="filters.to_date"
             @input="getDashboardData()"
           />

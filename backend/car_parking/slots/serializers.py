@@ -50,7 +50,8 @@ class SlotBookingSerializers(serializers.ModelSerializer):
     def validate(self, attrs):
         attrs['user'] = self.context.get('request').user
         booking_date = attrs['booking_date']
-        booking_slots = models.SlotBooking.objects.filter(booking_date=booking_date)
+        booking_slots = models.SlotBooking.objects.filter(booking_date=booking_date,
+                                                          booking_status=constants.BookingStatus.IN)
 
         slot_config = models.SlotConfig.objects.first()
 
@@ -60,13 +61,15 @@ class SlotBookingSerializers(serializers.ModelSerializer):
         if from_time > to_time:
             raise serializers.ValidationError("From Time can not be greater than To Time ")
 
-        slot_time = booking_slots.filter(from_time__range=[from_time, to_time])
+        slot_time = booking_slots.filter(from_time__gte=from_time, to_time__lte=to_time)
 
         list_of_vehicle_no = slot_time.values_list('vehicle_no', flat=True)
 
         if attrs['vehicle_no'] in list_of_vehicle_no:
-            raise serializers.ValidationError({'vehicle_no': f"This Vehicle is already booked on this time "
-                                                             f"{from_time}: {to_time}"})
+            raise serializers.ValidationError({
+                'vehicle_no': f"This Vehicle is already booked between in this time "
+                              f"{slot_time.first().from_time}: {slot_time.first().to_time} on {booking_date}"
+            })
 
         booking_hr = combine_date_time(booking_date, from_time)
         current_time = datetime.now()
