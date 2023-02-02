@@ -9,8 +9,13 @@
       dark
     >
       <v-toolbar-title class="d-flex">
-        <img src="@/assets/carparklogo1.png" height="70px" width="100px" class="py-1" light/>
-        <!-- <h4>Car Parking</h4> -->
+        <img
+          src="@/assets/download1.png"
+          height="85px"
+          width="150x"
+          class="py-1 pa-1"
+          light
+        />
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
