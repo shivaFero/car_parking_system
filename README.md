@@ -18,7 +18,7 @@ python mange.py run server
 set periodic task (which will be run every 5 mint)
 
 # Front End
-### create .env file at project label directory(add VUE_APP_BASE_URL=<backend_url>)
+create .env file at project label directory(add VUE_APP_BASE_URL=<backend_url>)
 ```
 npm run serve
 ```
