@@ -24,7 +24,7 @@ def get_payment_charges_info():
     current = 0
     res = {}
     for payment in payment_config:
-        res[f"{current} Hour to {payment.hr_range} Hour"] = f"{payment.price} Rs"
+        res[f"{current} to {payment.hr_range} Hour"] = f"{payment.price} Rs"
         current = payment.hr_range
 
     return res

@@ -64,11 +64,12 @@
               <v-col cols="6">
                 <v-select
                   hide-details="auto"
-                  label="Select Vehicle Type"
+                  label="Select Vehicle Type*"
                   outlined
-                  :items="vehicleTypes"
+                  :items="vehicleTypeList"
                   item-text="display_name"
                   item-value="value"
+                  :rules="[(val) => !!val || 'Vehicle Type is required']"
                   v-model="inputFormDetails.vehicle_type"
                   :error-messages="formErrors.vehicle_type"
                   @change="delete formErrors.vehicle_type"
@@ -143,15 +144,17 @@
 
 <script>
 import moment from "moment";
-import { vehicleTypes } from "@/utils/choices";
 export default {
   name: "Slot-Booking-Form",
   props: {
     value: Boolean,
+    vehicleTypeList: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
-      vehicleTypes,
       isValid: true,
       nonFieldError: [],
       inputFormDetails: {
@@ -159,19 +162,10 @@ export default {
       },
       formErrors: {},
       today: moment().format("YYYY-MM-DD"),
-      vehicleTypeList: [],
+      // vehicleTypeList: [],
       bookingDetails: {},
       paymentFormDialog: false,
     };
-  },
-  watch: {
-    value(val) {
-      if (val) {
-        console.log("called");
-      } else {
-        console.log("laa");
-      }
-    },
   },
   computed: {
     openFormDialog: {
@@ -214,22 +208,6 @@ export default {
             color: "error",
           });
         });
-    },
-    getSlotBookingOptionList(params = {}) {
-      this.$api.slotBooking
-        .getSlotBookingOptions(params)
-        .then((res) => {
-          this.vehicleTypeList =
-            res.data?.actions?.POST?.vehicle_type?.choices || [];
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    },
-    // mounted() {},
-    beforeMount() {
-      console.log("mounted");
-      this.getSlotBookingOptionList();
     },
   },
 };

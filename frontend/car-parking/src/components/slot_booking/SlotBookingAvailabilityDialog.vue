@@ -102,7 +102,6 @@ export default {
         .getSlotAvailability(params)
         .then((res) => {
           this.availabilityDetails = res.data;
-          console.log("tets-it", this.availabilityDetails);
         })
         .catch((err) => {
           console.error(err);

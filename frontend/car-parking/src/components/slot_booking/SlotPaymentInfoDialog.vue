@@ -10,7 +10,7 @@
       <v-card-title
         class="text-lg-subtitle-1 text-xl-h6 text-uppercase font-weight-black primary white--text pb-4"
       >
-        <h3>Hours Based Pricing</h3>
+        <h3>Pricing Details</h3>
         <v-spacer />
         <v-btn
           depressed

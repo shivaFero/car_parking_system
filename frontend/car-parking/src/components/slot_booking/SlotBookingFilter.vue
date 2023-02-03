@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="filterDialog" width="550">
+  <v-dialog v-model="filterDialog" width="650">
     <v-card class="pa-6">
       <v-card-title class="mb-2">
         <span
@@ -36,7 +36,7 @@
             <span class="text-body-2 font-weight-bold text-capitalize">
               {{ "filter by date" }}
             </span>
-            <v-row>
+            <v-row class="mt-1">
               <v-col cols="6">
                 <v-text-field
                   type="date"
